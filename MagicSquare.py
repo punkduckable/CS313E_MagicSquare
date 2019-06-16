@@ -25,39 +25,45 @@ def make_square(n):
     """ This method makes a magic square of size n. n is assumed to be an odd
     natural number. The magic square is returned. """
 
-    magic_square = [];
+    # First, let's initialze the magic_square to a nxn grid of zeros.
+    magic_square = [[0 for j in range(n)] for i in range(n)];
 
-    # First, let's initialze the magic_square up such that it is a nxn grid.
-    # I will do this by populating the magic_square with zeros (whcich will
-    # soon be replaced with the real contents of the square)
-    for i in range(n):
-        magic_square.append([0]*n);
+    """ Next, we iteratively populate the square. This uses the algorithm
+    outlined in the problem statement. I do this using two counters, i and j,
+    and two nested for loops.
 
-    # Next, we iteratively populate the square. This uses the algorithm outlined
-    # in the problem statement. I do this using two counters, i and j, which
-    # keep track of where we are in the square. We start off in the middle of
-    # the bottom row.
-    i = n-1;
+    i and j keep track of where we are in the square.
+
+    In the outer for loop, we loop through the "bands" of the matrix. I say that
+    two elements of the matrix are in the same band if you can get from one cell
+    to the other by moving down and to the right (account for wrap around). The
+    inner loop cycles through the elements of a particular band.
+
+    I choose to implement the algorithm in this way to improve efficiency. """
+
+    i = n-1;            # start in middle of the bottom row.
     j = (n-1)//2;
-    for k in range(1,n*n+1):
-        # populate the i,j cell of the magic_square!
-        magic_square[i][j] = k;
+    counter = 1;
+    
+    # Loop through the n "bands" of the magic square
+    for k in range(n):
+        # First, fill all but the last cell of the kth band of the magic square
+        for p in range(1,n):
+            # populate the i,j cell of the magic_square
+            magic_square[i][j] = counter;
 
-        # determine the cell that is down and to the right of the current
-        # position (Note: this accounts for wrap around)
-        next_i = i+1 if i != n-1 else 0;
-        next_j = j+1 if j != n-1 else 0;
+            # Get ready for the next cycle: determine the cell that is down
+            # and to the right of the current position (Note: this accounts for
+            # wrap around) and increment couter
+            i = i+1 if i != n-1 else 0;
+            j = j+1 if j != n-1 else 0;
+            counter +=1;
 
-        # now, check if the "next"" cell of magic_square is already populated
-        # (which happens if it is non-zero)
-        if(magic_square[next_i][next_j] != 0):
-            # If so, then we need to go decrement i by 1 and leave j alone
-            i = i-1 if i != 0 else n-1;
-            j = j;
-        else:
-            # otherwise, move i and j down and to the right.
-            i = next_i;
-            j = next_j;
+        # Now, fill the last cell of the band and then move up one (accounting
+        # for wrap around)
+        magic_square[i][j] = counter;
+        counter +=1;
+        i = i-1 if (i != 0) else n-1;
 
     # magic square should now be populated, return!
     return magic_square
