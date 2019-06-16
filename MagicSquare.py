@@ -20,7 +20,7 @@ Date Last Modified: 09/12/2019
 from math import log, floor
 
 
-# Populate a 2-D list with numbers from 1 to n2
+# Populate a 2-D list with numbers from 1 to n^2
 def make_square(n):
     """ This method makes a magic square of size n. n is assumed to be an odd
     natural number. The magic square is returned. """
@@ -51,7 +51,7 @@ def make_square(n):
         # now, check if the "next"" cell of magic_square is already populated
         # (which happens if it is non-zero)
         if(magic_square[next_i][next_j] != 0):
-            # If so, then we need to go decrement j by 1 and leave j alone
+            # If so, then we need to go decrement i by 1 and leave j alone
             i = i-1 if i != 0 else n-1;
             j = j;
         else:
@@ -75,7 +75,8 @@ def print_square(magic_square):
 
     # First, let's figure out how many characters we need to print out the
     # numbers. This is simply the number of digits in the largest number
-    # (which is n*n). This is simply the floor of log(n^2)+1.
+    # (which is n*n). This is simply the floor of log(n^2)+1, where the log
+    # is taken in base 10.
     width = floor(log(n*n,10)+1);
 
     # Now, print out the square row-by-row. right justify the output using
