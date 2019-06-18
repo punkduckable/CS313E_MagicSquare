@@ -44,7 +44,7 @@ def make_square(n):
     i = n-1;            # start in middle of the bottom row.
     j = (n-1)//2;
     counter = 1;
-    
+
     # Loop through the n "bands" of the magic square
     for k in range(n):
         # First, fill all but the last cell of the kth band of the magic square
@@ -102,7 +102,7 @@ def check_square (magic_square):
     """ This method checks that the magic_square is indeed a magic square.
     To do this, I check that each row of magic_square sums to the same value,
     and that the columns of magic_square sum to the same value. If this is the
-    case then the sum of the rows, columns, and two diagionals are printed. """
+    case then the sum of the rows, columns, and two diagonals are printed. """
 
     n = len(magic_square);
 
@@ -125,7 +125,7 @@ def check_square (magic_square):
         if(ith_row_sum != row_sum):
             print("""This is NOT a magic square. The sum of the 0 row of magic_square is %d\n
                   while the sum of the %d row of magic_square is %d""" % (row_sum, i, ith_row_sum));
-            return;
+            return False;
 
     ############################################################################
     # next, let's check that each column of magic_square has the same sum.
@@ -146,63 +146,77 @@ def check_square (magic_square):
         if(jth_col_sum != row_sum):
             print("""This is NOT a magic square. The sum of the 0 column of magic_square is %d\n
                   while the sum of the %d column of magic_square is %d""" % (col_sum, j, jth_col_sum));
-            return;
+            return False;
 
     ############################################################################
-    # If we have made it this far then the rows and columns of magic_square
-    # sum to the same value, respectivly. Let's print the row_sum, col_sum
-    # and sum of the two diagionals (which we need to calculate)
-
-    main_diagional_sum = 0;
-    off_diagional_sum = 0;
+    # Now, let's calculate the sum of the elements along the main diagonal and
+    # off diagonal of the square. Then, let's check that the row, column, and
+    # diagonal sums are the same.
+    main_diagonal_sum = 0;
+    off_diagonal_sum = 0;
     for k in range(n):
-        main_diagional_sum += magic_square[k][k];
-        off_diagional_sum += magic_square[k][(n-1) - k];
+        main_diagonal_sum += magic_square[k][k];
+        off_diagonal_sum += magic_square[k][(n-1) - k];
+
+    if(main_diagonal_sum != off_diagonal_sum) or (off_diagonal_sum != col_sum) or (col_sum != row_sum):
+        print("""This is NOT a matric square. The each row and column has the same\n
+                 sum respectivly. However, the rows, columns, and diagonals do not\n
+                 sum to the same value.\n
+                 Row sum    = %d\n
+                 Column sum = %d\n
+                 Main diagonal Sum = %d\n
+                 Off diagonal sum = %d\n""" % (row_sum, col_sum, main_diagonal_sum, off_diagonal_sum));
+        return False;
+
+    ############################################################################
+    # If we've made it here then square is ineeded a magic square. Let's print
+    # out the sums.
 
     print("Sum of row = %d" % row_sum);
     print("Sum of column = %d" % col_sum);
-    print("Sum diagonal (UL to LR) = %d" % main_diagional_sum);
-    print("Sum diagonal (UR to LL) = %d" % main_diagional_sum);
+    print("Sum diagonal (UL to LR) = %d" % main_diagonal_sum);
+    print("Sum diagonal (UR to LL) = %d" % main_diagonal_sum);
 
+    return True;
 
 
 def main():
-  # Prompt the user to enter an odd number 3 or greater.
-  while True:
-      try:
-          # First, get input from the user
-          n = input("Please enter an odd integer that is 3 or greater: ");
+    # Prompt the user to enter an odd number 3 or greater.
+    while True:
+        try:
+            # First, get input from the user
+            n = input("Please enter an odd integer that is 3 or greater: ");
 
-          # Try casting this to an integer. If is not possible, a ValueError
-          # will be raised.
-          n = int(n);
-      except ValueError:
-          print("Invalid input. Try again");
-          continue;
+            # Try casting this to an integer. If is not possible, a ValueError
+            # will be raised.
+            n = int(n);
+        except ValueError:
+            print("Invalid input. Try again");
+            continue;
 
-      # Check the user input
+        # Check the user input
 
-      # if n < 3 then go back to the start
-      if(n < 3):
-          print("I said 3 or greater (>= 3). Try again.");
-          continue;
+        # if n < 3 then go back to the start
+        if(n < 3):
+            print("I said 3 or greater (>= 3). Try again.");
+            continue;
 
-      # if n is odd then go back to the start
-      if(n % 2 == 0):
-          print("I said an ODD number. Try again.");
-          continue;
+        # if n is odd then go back to the start
+        if(n % 2 == 0):
+            print("I said an ODD number. Try again.");
+            continue;
 
-      # If we've made it to here then the input satisifes the checks! We can
-      # move on!
-      break;
+        # If we've made it to here then the input satisifes the checks! We can
+        # move on!
+        break;
 
-  # Create the magic square
-  magic_square = make_square(n);
+    # Create the magic square
+    magic_square = make_square(n);
 
-  # Print the magic square
-  print_square(magic_square);
+    # Print the magic square
+    print_square(magic_square);
 
-  # Verify that it is a magic square
-  check_square(magic_square);
+    # Verify that it is a magic square
+    check_square(magic_square);
 
 main()
